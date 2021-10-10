@@ -53,5 +53,9 @@ jobs:
         run: |
           ./target/release/rust-web-actix &
           sleep 1
-          if [[ "Hello world" != `curl http://localhost:8080` ]]; then exit 1; fi
+          ./bin/create-person Jane Doe
+          if [[ -z `./bin/list-persons | grep Jane` ]]; then echo "Jane not found"!; exit 1; fi
+          if [[ -z `./bin/get-person 1 | grep Jane` ]]; then echo "Person with id: 1 not found!"; exit 1; fi
+          ./bin/delete-person 1
+          if [[ -n `./bin/get-person 1 | grep Jane` ]]; then echo "Person with id: 1 found!"; exit 1; fi
           pkill rust-web-actix
